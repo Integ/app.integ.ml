@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Kindle Browser Eval</title>
+</head>
+
+<body>
+    <textarea id='cmd' rows="3" , cols='44'>window.navigator.userAgent</textarea>
+    <button id='run'>Run</button>
+    <button id='clear'>Clear</button>
+    <h3>Result</h3>
+    <div>
+        <p id="console"></p>
+    </div>
+    <h3>Error Info</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Message</th>
+                <th width="100">Source</th>
+                <th width="100">LineNo</th>
+                <th width="100">ColNo</th>
+                <th width="100">ErrorObj</th>
+            </tr>
+        </thead>
+        <tbody id='error'></tbody>
+    </table>
+    <script>
+        window.onerror = function (message, source, lineno, colno, error) {
+            var html = '<tr>\
+                    <td>' + message + '</td>\
+                    <td>' + source + '</td>\
+                    <td>' + lineno + '</td>\
+                    <td>' + colno + '</td>\
+                    <td>' + error + '</td>\
+                </tr>';
+            document.getElementById('error').innerHTML = html;
+        };
+
+        var textarea = document.getElementById('cmd')
+        document.getElementById('run').addEventListener('click', function (e) {
+            var cmd = textarea.value;
+            var result = eval(cmd);
+            if (typeof result === 'object') {
+                result = jsonify(result);
+            }
+            document.getElementById('console').innerText = result;
+        });
+        document.getElementById('clear').addEventListener('click', function (e) {
+            textarea.value = '';
+        });
+        if (sessionStorage.getItem("autosave")) {
+            // 恢复文本输入框的内容
+            textarea.value = sessionStorage.getItem("autosave");
+        }
+        textarea.addEventListener("change", function () {
+            // 保存结果到 sessionStorage 对象中
+            sessionStorage.setItem("autosave", textarea.value);
+        });
+
+        var jsonify = function (obj) {
+            seen = [];
+
+            var replacer = function (key, value) {
+                if (value != null && typeof value == "object") {
+                    if (seen.indexOf(value) >= 0) {
+                        return;
+                    }
+                    seen.push(value);
+                }
+                return value;
+            };
+
+            return JSON.stringify(obj, replacer);
+        };
+    </script>
+</body>
+
+</html>
