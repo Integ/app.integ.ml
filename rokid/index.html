@@ -3,17 +3,19 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Integ Republic</title>
+    <title>Rokid Webhook- Integ</title>
 </head>
 
 <body>
     <canvas id="canvas" height="300"></canvas>
+    <input type="text" size="35" id="rokidSN" placeholder="ROKID_SN e.g. 0001121743000214" />
+    <input type="text" size="35" id="rokidWebhook" placeholder="ROKID_WEBHOOK e.g. rJTmCO9k7" />
     <div>
-        <textarea id="textarea" rows="6" cols="100"></textarea>
+        <textarea id="textarea" rows="6" placeholder="SSML surported, more info at https://github.com/Rokid/docs/blob/master/2-RokidDocument/1-SkillsKit/ssml-document.md" cols="100"></textarea>
         <button id="rokidTTS">Rokid TTS</button>
     </div>
     <div>
-        <input id="input" size="85" placeholder="eg. http://integ.b0.upaiyun.com/StarWars.mp3"></input>
+        <input id="input" size="85" placeholder="e.g. http://integ.b0.upaiyun.com/StarWars.mp3"></input>
         <button id="rokidAudio">Rokid Audio</button>
     </div>
     <ul id="log"></ul>
@@ -81,8 +83,8 @@
     };
     run();
     
-    const ROKID_SN = "0001121743000214";
-    const ROKID_WEBHOOK = "rJTmCO9k7";    
+    const ROKID_SN = document.querySelector('rokidSN').value || "0001121743000214";
+    const ROKID_WEBHOOK = document.querySelector('rokidWebhook').value || "rJTmCO9k7";   
     const ROKID_URL = `https://homebase.rokid.com/trigger/with/${ROKID_WEBHOOK}`;
     document.querySelector('button#rokidTTS').addEventListener('click', (e) => {
         const text = document.querySelector('#textarea').value;
@@ -144,4 +146,3 @@
 </body>
 
 </html>
-
